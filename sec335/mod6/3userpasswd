@@ -1,0 +1,3 @@
+frank:x:1007:1007::/home/frank:/bin/bash
+billy:x:1008:1008::/home/billy:/bin/bash
+donna:x:1009:1009::/home/donna:/bin/bash

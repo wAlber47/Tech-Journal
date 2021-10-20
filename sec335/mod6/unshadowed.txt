@@ -1,0 +1,3 @@
+frank:$6$xQjSkN3O$4DIWbcokYdhqNT0p0LCwynH0qxLRSs/x5k6xrp1yN7VqicFk/rraau8JMOXDEoHUkPg7AKkiTtL.N9tjpGMsn.:1007:1007::/home/frank:/bin/bash
+billy:$6$R2mzvYQh$Kx5wi2C4JL3yMiCdMVfIiP.XLes0eg99wJ/fzq5LUfNrM4R1Ewo0fhEkVzOiSCx09eUmbn.FgD7bQos7ecsfN0:1008:1008::/home/billy:/bin/bash
+donna:$6$dcWhK1FA$4WGnp15wmCJIE4Qn9dl/jbCviuZlUj0N/ILoIXkq4QpoaGaIwxetSEHqXq47yfyfrC6Pr0Zn9Ak.iBZ795fga0:1009:1009::/home/donna:/bin/bash
