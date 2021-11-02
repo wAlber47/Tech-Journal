@@ -1,9 +1,7 @@
 # 480utils.ps1 Script for NET-480
 # Can be used to create a linked clone in vCenter
 # Created by William Alber
-# Helped by Sam Johnson
 
-# First, attempts to connect to my vCenter instance
 function Connect-to-Instance {
     try {
         Connect-VIServer -Server vcenter.alber.local -ErrorAction Stop
@@ -11,8 +9,8 @@ function Connect-to-Instance {
     }
     catch {
         Write-Host "Connection Unsuccessful"
-        Connect-Instance
-    }
+        Connect-to-Instance
+        }
 }
 
 # set the vm name
@@ -41,11 +39,11 @@ function Base-VM {
 # selects the host, in our case super4 will always be the host
 function VM-Host {
     $hosts = Get-VMHost
-    Write-Host "Available Hosts: " `n $hosts
+    Write-Host "`nAvailable Hosts: " `n $hosts
     $vhost = Read-Host -Prompt "Select a host for the Virtual Machine"
     try {
         $vmhost = Get-VMHost -Name $vhost -ErrorAction Stop
-        Write-Host "Host to use: $vmhost`n`n"
+        Write-Host "Host to use: $vmhost`n"
     }
     catch {
         Write-Host "Cannot find selected Host"
@@ -70,18 +68,111 @@ function Use-DStore {
     return $dstore
 }
 
+function VM-Creation { 
+    $name = Name
+    $base_vm = Base-VM
+    $vm_host = VM-Host
+    $dstore = Use-DStore
+
+    Write-Host "`n`nVirtual Machine will be created..."
+    try {
+        New-VM -Name $name.ToString() -VM $base_vm -LinkedClone -ReferenceSnapshot Base -VMHost $vm_host -Datastore $dstore   
+    }
+    catch {
+        Write-Host "Something went wrong..."
+        exit
+    }
+}
+
+function Create-Network {
+    $name = Read-Host -Prompt "`nNetwork Name"
+
+    New-VirtualSwitch -Name $name -VMHost "super4.cyber.local"
+    New-VirtualPortGroup -Name $name -VirtualSwitch $name
+}
+
+function Start {
+    $vmStart = Read-Host -Prompt "Which Virtual Machine would you like to start"
+
+    try {
+        Start-VM -VM $vmstart
+    }
+    catch {
+        Write-Host "Something went wrong..."
+        exit
+    }
+}
+
+function Network-Change {
+    $vm = Read-Host -Prompt "Enter a Virtual Machine"
+    $network = Read-Host -Prompt "Enter a Network"
+    $adapter = Get-NetworkAdapter -VM $vm -Name "Network adapter 1"
+
+    Write-Host "Setting Network Adaptor of $vm to $network"
+    Set-NetworkAdapter -NetworkAdapter $adapter -NetworkName $network
+}
+
+function ExtractBase {
+    
+    $vm = Read-Host -Prompt "Enter Virtual Machine name"
+    $snapshot = Get-Snapshot -VM $vm -Name "Base"
+    $vhost = VM-Host
+    $ds = Use-DStore
+    $linkedname = "{0}.linked" -f $vm.name
+
+    Write-Host "Extracting image..."
+    $linkedvm = New-VM -LinkedClone -Name $linkedname -VM $vm -ReferenceSnapshot $snapshot -VMHost $vhost -Datastore $ds
+    $newvm = New-VM -Name "$vm.base" -VM $linkedvm -VMhost $vhost -Datastore $ds -Location "BASE-VMS"
+    $newvm | New-Snapshot -Name "Base"
+    Remove-VM -VM $linkedvm
+}
+
+function Get-IP {
+    $vms = Get-VM
+    Write-Host "`nSelect a Virtual Machine to extract from: " `n $vms
+    $name = Read-Host -Prompt "What Virtual Machine's IP Address do you want"
+    $vm = Get-VM -Name $name.ToString()
+
+    $ip = $vm.guest.IPAddress[0]
+    Write-Host $ip
+    return $ip
+}
+
 Connect-to-Instance
-$name = Name
-$base_vm = Base-VM
-$vm_host = VM-Host
-$dstore = Use-DStore
 
-Write-Host "`n`nVirtual Machine will be created..."
-try {
-    New-VM -Name $name.ToString() -VM $base_vm -LinkedClone -ReferenceSnapshot Base -VMHost $vm_host -Datastore $dstore
-}
-catch {
-    Write-Host "Something went wrong..."
-    exit
+while (1 -eq 1) {
+$user_in = Read-Host -Prompt @"
+What would you like to do:
+
+[1] Create Linked Clone
+[2] Create Virtual Network
+[3] Extract a Base Image
+[4] Turn on Virtual Machine
+[5] Change VM's Network
+[6] Get IP Address
+
+Please enter number here
+"@
+
+    if ($user_in -eq "1") {
+        VM-Creation
+    }
+    elseif ($user_in -eq "2") { 
+        Create-Network
+    }
+    elseif ($user_in -eq "3") {
+        ExtractBase
+    }
+    elseif ($user_in -eq "4") {
+        Start
+    }
+    elseif ($user_in -eq "5") {
+        Network-Change
+    }
+    elseif ($user_in -eq "6") {
+        Get-IP
+    }
 }
 
+
+# VM-Creation
