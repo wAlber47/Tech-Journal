@@ -1,0 +1,12 @@
+network:
+  ethernets:
+    {{ device }}
+      addresses:
+      - {{ lan_ip }}/{{ prefix }}
+      gateway4: {{ gateway }}
+      nameservers:
+        addresses:
+        - {{ name_server }}
+        search:
+        - {{ domain }}
+  version: 2
