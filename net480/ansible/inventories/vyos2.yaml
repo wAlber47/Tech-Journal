@@ -14,5 +14,5 @@ vyos:
     ansible_network_os: vyos
     ansible_user: vyos
 
-    
+
       
