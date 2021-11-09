@@ -1,0 +1,32 @@
+linux:
+  hosts:
+  children:
+    centos:
+      hosts:
+        10.0.5.75:
+          hostname: centos-1
+          lan_ip: 10.0.5.10
+        10.0.5.76:
+          hostname: centos-2
+          lan_ip: 10.0.5.11
+        10.0.5.77:
+          hostname: centos-3
+          lan_ip: 10.0.5.12
+
+    ubuntu:
+      hosts:
+        10.0.5.79:
+          hostname: ubuntu-1
+          lan_ip: 10.0.5.13
+        10.0.5.80:
+          hostname: ubuntu-2
+          lan_ip: 10.0.5.14
+
+  vars:
+    public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCdU/PJvtA6U2/VFtKpGOM+jAlKBOp7WKpNaulpUM+WCkjMIVFHbHFISO1SFH2dikDABQg/k3ZHzGT1dkhB8hSVCvLS3ynsN2wIMTnkPOPGkDzXolWrsuuBp4o1hBfB4a48aQCU/SnX6zbFPp41hfQJSj+PBglgaJ8hVLNiJR9Vm6K+lpPZlf6w7za6j4vYTBmUgg8LbplALv6O88aqC/K2LWrzqLa7eQ5sz84QgJlVOWkRyWcaBw7dyQ0H0HhUY/v5lEpF3RqLTRTFIBGX94cri9TtYUIm2z+RC3xhrrgc5YtLHKlTQzmfH4eU+r2k++DTwr11sxpcdJRalwuffCR2BRaXx6JMye50mEPJkDgMz1BqQMSa3LIZgMHOF9EE+RnpG12Lu2o5GjN7mlABKNKv+5k2M0kUB9jvrp9xfp8Gcs1Pa5+9Osf19bS2GleGNQzdnXqPO5RwWReRdUikLdJgdMEmRzIPIYZqMDAA6PflW3eYrb8EoKv2yXEZQysmXlE= william@ubuntu"
+    ansible_user: deployer
+    device: ens192
+    prefix: 24
+    gateway: 10.0.5.2
+    name_server: 10.0.5.5
+    domain: blue4.local
