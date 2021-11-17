@@ -134,11 +134,8 @@ function Get-IP {
     $vm = Get-VM -Name $name.ToString()
 
     $ip = $vm.guest.IPAddress[0]
-<<<<<<< HEAD
     $mac = ($vm | Get-NetworkAdapter)[0].MacAddress
     Write-Host "`nip= $ip mac=$mac`n"
-=======
->>>>>>> 80a58447259a2fc4ca368fc652ccfebf5c63c86c
     return $ip
 }
 
