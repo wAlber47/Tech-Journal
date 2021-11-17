@@ -130,12 +130,15 @@ function ExtractBase {
 function Get-IP {
     $vms = Get-VM
     Write-Host "`nSelect a Virtual Machine to extract from: " `n $vms
-    $name = Read-Host -Prompt "What Virtual Machine's IP Address do you want"
+    $name = Read-Host -Prompt "`nWhat Virtual Machine's IP Address do you want"
     $vm = Get-VM -Name $name.ToString()
 
     $ip = $vm.guest.IPAddress[0]
+<<<<<<< HEAD
     $mac = ($vm | Get-NetworkAdapter)[0].MacAddress
     Write-Host "`nip= $ip mac=$mac`n"
+=======
+>>>>>>> 80a58447259a2fc4ca368fc652ccfebf5c63c86c
     return $ip
 }
 
