@@ -1,0 +1,22 @@
+- name: vyos network config
+  hosts: vyos
+  vars_prompt:
+  - name: mapping_name
+    prompt: "what do you want to call this mapping name? (hostname of target)"
+    private: no 
+  
+  - name: mac_address
+    prompt: "mac address to use?"
+    private: no
+  
+  - name: ip_address
+    prompt: "ip address to use?"
+    private: no
+    
+  tasks:
+    - name: configure vyos dhcp statis mapping
+      vyos_config:
+        save: yes
+        lines:
+        - set service dhcp-server shared-network-name '{{ shared_network }}' subnet '{{ lan }}' static-mapping '{{ mapping_name }}' ip-address '{{ ip_address }}' 
+        - set service dhcp-server shared-network-name '{{ shared_network }}' subnet '{{ lan }}' static-mapping '{{ mapping_name }}' mac-address '{{ mac_address }}'
