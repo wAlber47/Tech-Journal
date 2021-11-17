@@ -118,7 +118,7 @@ function ExtractBase {
     $snapshot = Get-Snapshot -VM $vm -Name "Base"
     $vhost = VM-Host
     $ds = Use-DStore
-    $linkedname = "{0}.linked" -f $vm.name
+    $linkedname = "$vm.linked" -f $vm.name
 
     Write-Host "Extracting image..."
     $linkedvm = New-VM -LinkedClone -Name $linkedname -VM $vm -ReferenceSnapshot $snapshot -VMHost $vhost -Datastore $ds
@@ -134,7 +134,8 @@ function Get-IP {
     $vm = Get-VM -Name $name.ToString()
 
     $ip = $vm.guest.IPAddress[0]
-    Write-Host $ip
+    $mac = ($vm | Get-NetworkAdapter)[0].MacAddress
+    Write-Host "`nip= $ip mac=$mac`n"
     return $ip
 }
 
