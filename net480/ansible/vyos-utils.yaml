@@ -14,7 +14,7 @@
     private: no
     
   tasks:
-    - name: configure vyos dhcp statis mapping
+    - name: configure vyos dhcp static mapping
       vyos_config:
         save: yes
         lines:
