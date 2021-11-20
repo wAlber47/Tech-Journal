@@ -12,9 +12,9 @@ windows:
 
     workstations:       
       hosts:
-        10.0.5.101:
+        10.0.5.81:
           hostname: wks1
-        10.0.5.102:
+        10.0.5.82:
           hostname: wks2
       vars:
         domain_ou_path: 'OU=workstations,OU=computers,OU=blue4,DC=blue4,DC=local'
