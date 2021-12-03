@@ -14,14 +14,14 @@
 
   - name: create file structure
     win_file:
-      path: "C:\File-Share\{{ item }}"
+      path: 'C:\FileShare\{{ item }}'
       state: directory
     with_items: "{{ groupnames.stdout_lines}}"
   
   - name: creating file share
     win_share:
       name: "{{ item }}"
-      path: "C:\File-Share\{{ item }}"
+      path: 'C:\FileShare\{{ item }}'
       list: yes
       full: Blue4\Domain Admins,Blue4\{{ item }}
       state: present
