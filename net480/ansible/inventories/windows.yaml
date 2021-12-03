@@ -9,6 +9,7 @@ windows:
           hostname: fs-blue4
       vars:
         domain_ou_path: 'OU=servers,OU=computers,OU=blue4,DC=blue4,DC=local'
+        ansible_shell_type: powershell
 
     workstations:       
       hosts:
@@ -18,14 +19,13 @@ windows:
           hostname: wks2
       vars:
         domain_ou_path: 'OU=workstations,OU=computers,OU=blue4,DC=blue4,DC=local'
+        ansible_shell_type: powershell
 
   vars:
-    ansible_user: deployer
+    ansible_user: Administrator@blue4.local
     device: Ethernet0
     netmask: 255.255.255.0
     gateway: 10.0.5.2
     name_server: 10.0.5.5
     domain: blue4.local
-    ansible_shell_type: powershell
-
     

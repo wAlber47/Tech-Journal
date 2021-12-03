@@ -1,0 +1,28 @@
+- name: smb share
+  hosts: 10.0.5.6
+  tasks:
+  - name: read group file
+    command: cat ./groups.txt
+    register: groupnames
+    delegate_to: 127.0.0.1
+
+  - name: installing file system services
+    win_feature:
+      name: File-Services
+      state: present
+    register: win_feature
+
+  - name: create file structure
+    win_file:
+      path: "C:\File-Share\{{ item }}"
+      state: directory
+    with_items: "{{ groupnames.stdout_lines}}"
+  
+  - name: creating file share
+    win_share:
+      name: "{{ item }}"
+      path: "C:\File-Share\{{ item }}"
+      list: yes
+      full: Blue4\Domain Admins,Blue4\{{ item }}
+      state: present
+    with_items: "{{ groupnames.stdout_lines }}"

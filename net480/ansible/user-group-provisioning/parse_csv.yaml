@@ -1,0 +1,51 @@
+- name: parsecsv
+  hosts:
+    10.0.5.5
+  gather_facts: no
+  vars_prompt:
+  - name: adminname
+    prompt: "New Local Admin Name"
+    private: no
+  
+  - name: adminpass
+    prompt: "New Local Admin Password"
+    private: yes
+  tasks:
+  - name: create domain admin
+    win_domain_user:
+      name: "{{ adminname }}"
+      password: "{{ adminpass }}"
+      state: present
+      groups: 
+        - Domain Admins
+
+# Group Names is Working
+  - name: read group file
+    command: cat ./groups.txt
+    register: groupnames
+    delegate_to: 127.0.0.1
+
+  - name: add group loop
+    win_domain_group:
+      name: "{{ item }}"
+      scope: domainlocal
+      state: present
+    with_items: "{{ groupnames.stdout_lines }}"
+
+# Accounts NOT Working
+  - name: read accounts file
+    read_csv:
+      path: ./accounts.csv
+    register: accounts
+    delegate_to: 127.0.0.1
+
+  - name: add accounts loop
+    win_domain_user:
+      name: "{{ item.account_name }}"
+      firstname: "{{ item.name }}"
+      password: "{{ item.password }}"
+      groups:
+        - "{{ item.group }}"
+    with_items: "{{ accounts.list }}"
+
+
